@@ -21,12 +21,11 @@ module.exports = class login{
             )
         }
         
-        await bcrypt.compare(password, user[0].password, function(err, res){
-            if (err) {
-                res.send({message: 'erro password'})
-            }
-            
-        })
+        if (!bcrypt.compareSync(password, user[0].password)) {
+            return(
+                res.status(401).send({message: 'password incorrect'})
+            )
+        }
 
         return(
             res.send(user)
