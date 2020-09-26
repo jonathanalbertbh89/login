@@ -2,12 +2,18 @@ const express = require('express');
 
 const routes = express();
 
-const User = require('../controllers/UserController/index');
+
+const login = require('../controllers/Login/index')
+const register = require('../controllers/Register/index')
 
 
-const Login = new User();
+
+const Login = new login();
+const Register = new register();
 
 routes.post('/login', Login.loginAutenticate);
-routes.post('/register', Login.register);
+routes.post('/register', Register.register);
+
+
 
 module.exports = routes;

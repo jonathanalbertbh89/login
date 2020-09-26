@@ -1,11 +1,13 @@
-const { request } = require('express');
 const bcrypt = require('bcrypt')
 const express = require('express');
 
+const jtw = require('jsonwebtoken');
+const md5 = require('../../config/auth.json');
+
+
 const db = require('../../connection/index');
 
-
-module.exports = class login{
+module.exports = class Login{
 
     async loginAutenticate(req, res){
         const{
@@ -27,28 +29,17 @@ module.exports = class login{
             )
         }
 
-        return(
-            res.send(user)
-        )
-    }
+        const token = await jtw.sign(user[0].id, md5.secret)
 
-
-    async register(req,res){
-
-        const{
-            name,
-            password
-        }= req.body;
-
-        const encrypded = bcrypt.hashSync(password, 10)
-
-        const insert = await db('user').insert({name: name, password: encrypded})
 
 
         return(
-            res.status(201).send({message: 'Create user sucessfully'})
+            res.send({
+                user_id: user[0].id,
+                user_name: user[0].name,
+                token : token
+            })
         )
-
     }
 
 }
